@@ -7,38 +7,38 @@ const {
 } = require('express-validator');
 
 // Display list of all Authors
-exports.author_list = function (req, res) {
+exports.author_list = function(req, res) {
 
   Author.find()
-          .sort([
-            ['family_name', 'ascending']
-          ])
-          .exec(function (err, list_authors) {
-            if (err) {
-              return next(err);
-            }
-            // Successful, so render
-            res.render('author_list', {
-              title: 'Author List',
-              author_list: list_authors
-            });
-          });
+    .sort([
+      ['family_name', 'ascending']
+    ])
+    .exec(function(err, list_authors) {
+      if (err) {
+        return next(err);
+      }
+      // Successful, so render
+      res.render('author_list', {
+        title: 'Author List',
+        author_list: list_authors
+      });
+    });
 };
 
 // Display detail page for a specific Author
-exports.author_detail = function (req, res, next) {
+exports.author_detail = function(req, res, next) {
   async.parallel({
-    author: function (callback) {
+    author: function(callback) {
       Author.findById(req.params.id)
-              .exec(callback);
+        .exec(callback);
     },
-    author_books: function (callback) {
+    author_books: function(callback) {
       Book.find({
-        'author': req.params.id
-      }, 'title summary')
-              .exec(callback);
+          'author': req.params.id
+        }, 'title summary')
+        .exec(callback);
     }
-  }, function (err, results) {
+  }, function(err, results) {
     if (err) {
       return next(err);
     } // Error in API usage
@@ -57,7 +57,7 @@ exports.author_detail = function (req, res, next) {
 };
 
 // Display Author create form on GET
-exports.author_create_get = function (req, res, next) {
+exports.author_create_get = function(req, res, next) {
   res.render('author_form', {
     title: 'Create Author'
   });
@@ -69,12 +69,12 @@ exports.author_create_post = [
   body('first_name').trim().isLength({
     min: 1
   }).escape().withMessage('First name must be specified.')
-          .isAlphanumeric().withMessage('First name has non-alphanumeric characters.'),
+  .isAlphanumeric().withMessage('First name has non-alphanumeric characters.'),
 
   body('family_name').trim().isLength({
     min: 1
   }).escape().withMessage('Family name must be specified.')
-          .isAlphanumeric().withMessage('Family name has non-alphanumeric characters.'),
+  .isAlphanumeric().withMessage('Family name has non-alphanumeric characters.'),
 
   body('date_of_birth', 'Invalid date of birth').optional({
     checkFalsy: true
@@ -107,7 +107,7 @@ exports.author_create_post = [
       // Data from form is valid
 
       // Save author
-      author.save(function (err) {
+      author.save(function(err) {
         if (err) {
           return next(err);
         }
@@ -118,17 +118,17 @@ exports.author_create_post = [
 ];
 
 // Display Author delete form on GET
-exports.author_delete_get = function (req, res, next) {
+exports.author_delete_get = function(req, res, next) {
   async.parallel({
-    author: function (callback) {
+    author: function(callback) {
       Author.findById(req.params.id).exec(callback);
     },
-    authors_books: function (callback) {
+    author_books: function(callback) {
       Book.find({
         'author': req.params.id
       }).exec(callback);
     }
-  }, function (err, results) {
+  }, function(err, results) {
     if (err) {
       return next(err);
     }
@@ -139,23 +139,23 @@ exports.author_delete_get = function (req, res, next) {
     res.render('author_delete', {
       title: 'Delete Author',
       author: results.author,
-      author_books: results.authors_books
+      author_books: results.author_books
     });
   });
 };
 
 // Handle Author delete on POST
-exports.author_delete_post = function (req, res, next) {
+exports.author_delete_post = function(req, res, next) {
   async.parallel({
-    author: function (callback) {
+    author: function(callback) {
       Author.findById(req.body.authorid).exec(callback);
     },
-    authors_books: function (callback) {
+    authors_books: function(callback) {
       Book.find({
         'author': req.body.authorid
       }).exec(callback);
     }
-  }, function (err, results) {
+  }, function(err, results) {
     if (err) {
       return next(err);
     }
@@ -169,8 +169,8 @@ exports.author_delete_post = function (req, res, next) {
       });
       return;
     } else {
-      // Author has no books - delete object and redirect to the list of authors
-      Author.findByIdAndRemove(req.body.authorid, function (err) {
+      // Author has no books - Delete object and redirect to the list of authors
+      Author.findByIdAndRemove(req.body.authorid, function(err) {
         if (err) {
           return next(err);
         }
@@ -182,11 +182,11 @@ exports.author_delete_post = function (req, res, next) {
 };
 
 // Display Author update form on GET
-exports.author_update_get = function (req, res) {
+exports.author_update_get = function(req, res) {
   res.send('NOT IMPLEMENTED: Author update GET');
 };
 
 // Handle Author update on POST
-exports.author_update_post = function (req, res) {
+exports.author_update_post = function(req, res) {
   res.send('NOT IMPLEMENTED: Author update POST');
 };

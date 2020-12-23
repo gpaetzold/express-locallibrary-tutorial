@@ -2,10 +2,20 @@ extends layout
 
 block content
 
-  h1 #{title}: #{author.name}
-  p= author.lifespan
+  h1 #{title}: #{book.title}
 
-  if author_books.length
+  p #[strong Author:]
+    a(book.author.url) #{book.author.name}
+  p #[strong Summary:] #{book.author.name}
+  p #[strong ISBN:]
+  p #[strong Genre:]
+    each val in book.genre
+      a(href=val.url) #{val.name}
+      |,
+      
+  hr
+    
+  if book_instances.length
 
 
     p #[strong Delete the following books before attempting to delete this author]
