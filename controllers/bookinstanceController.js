@@ -219,7 +219,7 @@ exports.bookinstance_update_post = [
           if (err) {
             return next(err);
           }
-          // Successful, so render.
+          // Successful, so render
           res.render('bookinstance_form', {
             title: 'Update BookInstance',
             book_list: books,
